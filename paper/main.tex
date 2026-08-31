@@ -1,0 +1,729 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,left=28mm,right=28mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\pos}[1]{[#1]_{+}}
+
+\title{A \(0.45\) Upper Bound for the i.i.d. Berry--Esseen Constant}
+\author{%
+  Haonan Xiao\({}^{1}\) \qquad Chunlin Li\({}^{2}\)\\[3pt]
+  {\small \({}^{1}\)Department of Statistics, Iowa State University}\\[-1pt]
+  {\small \({}^{2}\)Department of Statistics, University of Virginia}
+}
+\date{August 31, 2026}
+
+\hypersetup{
+  pdftitle={A 0.45 Upper Bound for the i.i.d. Berry-Esseen Constant},
+  pdfauthor={Haonan Xiao and Chunlin Li},
+  pdfsubject={A formally verified upper bound in the classical i.i.d. Berry-Esseen inequality}
+}
+
+\begin{document}
+\maketitle
+
+\begingroup
+\renewcommand{\thefootnote}{}
+\footnotetext[1]{Emails:
+  \href{mailto:xhn@iastate.edu}{\texttt{xhn@iastate.edu}} (H.~Xiao) and
+  \href{mailto:chunlin@virginia.edu}{\texttt{chunlin@virginia.edu}} (C.~Li).}
+\endgroup
+
+\begin{abstract}
+We prove that the absolute constant in the classical Berry--Esseen inequality
+for identically distributed summands is at most \(0.45\).  The key quantity is
+the symmetrized third-moment ratio
+\(r=\E\abs{X-X'}^3/(2\E\abs X^3)\), where \(X'\) is an independent copy of a
+centered variance-one summand \(X\).
+Symmetrization yields a modulus bound at scale \(r\E\abs X^3\), while the same
+\(r\) sharpens the third-order bound for the imaginary part of the
+characteristic function.  Retaining this dependence gives
+a sharper single-summand comparison with the Gaussian characteristic function.
+Prawitz smoothing then reduces the proof to a scalar inequality on a compact
+parameter domain, which is established by exact dyadic interval certificates.
+The analytic reduction and the exact certificate are formally verified in
+Lean.
+\end{abstract}
+
+\section{Introduction}\label{sec:introduction}
+
+Let \(X,X_1,X_2,\ldots\) be independent and identically distributed real
+random variables with
+\[
+  \E X=0,\qquad \E X^2=1,\qquad
+  \rho:=\E\abs{X}^3<\infty,
+\]
+and call a law satisfying these conditions admissible.  Set
+\[
+  S_n:=\frac{X_1+\cdots+X_n}{\sqrt n},\qquad
+  \Delta_n:=\sup_{x\in\R}\abs{\Pp\{S_n\le x\}-\Phi(x)},
+\]
+where \(\Phi\) denotes the standard normal distribution function.  The
+optimal i.i.d. Berry--Esseen constant is
+\[
+ C_0:=\inf\left\{C>0:\Delta_n\le
+ C\frac{\rho}{\sqrt n}\text{ for all admissible laws and all }n\ge1\right\}.
+\]
+Esseen's classical example gives
+\[
+ C_0\ge C_{\mathrm E}:=
+ \frac{\sqrt{10}+3}{6\sqrt{2\pi}}
+ =0.409732\ldots\,\cite{esseen1956}.
+\]
+Shevtsova proved the published upper bound \(C_0\le0.4690\)
+\cite{shevtsova2013}; Bobkov's survey records the resulting interval
+\(0.4097<C_0<0.4690\) \cite[Theorem~20.1]{bobkov2016}.
+To the best of our knowledge, \(0.4690\) is the smallest previously published
+general i.i.d. upper bound.
+
+\begin{theorem}\label{thm:main}
+For every admissible law and every integer \(n\ge1\),
+\[
+  \Delta_n\le 0.45\,\frac{\rho}{\sqrt n}.
+\]
+Consequently, \(C_0\le0.45\).
+\end{theorem}
+
+The improvement comes from retaining the dependence between two estimates for
+the characteristic function.  If \(X'\) is an independent copy of \(X\), set
+\[
+ r:=\frac{\E\abs{X-X'}^3}{2\rho}.
+\]
+The symmetrized law gives a modulus bound depending on \(r\rho\).  A stop-loss
+identity, applied to the same ratio, bounds the sine remainder
+\(\E(\sin(uX)-uX)\), equivalently the imaginary part of
+\(\E e^{iuX}-(1-u^2/2)\).  The modulus bound weakens as \(r\) increases,
+whereas the bound on the sine remainder strengthens.  Preserving this
+dependence sharpens the comparison between \(\E e^{iuX}\) and \(e^{-u^2/2}\).
+
+Write \(L=\rho/\sqrt n\).  A direct estimate handles \(L\ge56/45\).  For
+\(L<56/45\), Prawitz's smoothing inequality turns these
+characteristic-function bounds into an explicit scalar inequality in
+\((n,\rho,r)\).  Exact interval arithmetic proves it on the full continuous
+parameter domain.
+
+\section{Moment constraints for the characteristic function}%
+\label{sec:moment-parameter}
+
+Two pointwise estimates will be needed below: a modulus bound obtained from
+\(X-X'\), and a bound on the sine remainder \(\E(\sin(uX)-uX)\).  Both depend
+on the ratio \(r\).  We first determine its admissible range and the
+corresponding restriction on the sine remainder.
+
+\subsection{The symmetrized third-moment ratio}\label{sec:moment-geometry}
+
+Let \(X'\) be an independent copy of \(X\), and define
+\[
+ m:=\E\abs{X-X'}^3,\qquad r:=\frac{m}{2\rho}.
+\]
+For \(t\ge0\), introduce the stop-loss functions
+\[
+ A(t):=\E(X-t)_+,\qquad B(t):=\E(-X-t)_+,
+\]
+and put \(r_0:=\E X_+=\E X_-\).
+
+\begin{lemma}\label{lem:stoploss}
+One has
+\begin{align}
+ m&=2\rho+12\int_0^\infty\bigl(A(t)^2+B(t)^2\bigr)\dd t,
+ \label{eq:m-stop}\tag{2.1}\\
+ 3\int_0^\infty A(t)^2\dd t&\le r_0\E X_+^2,
+ \qquad
+ 3\int_0^\infty B(t)^2\dd t\le r_0\E X_-^2.
+ \label{eq:hardy}\tag{2.2}
+\end{align}
+Consequently,
+\[
+ 1\le r\le1+\frac{\E\abs X}{\rho}
+ \le1+\frac1\rho\le2.
+ \label{eq:r-range}\tag{2.3}
+\]
+If \(\mu:=\E X^3\), then
+\[
+ (r-1)^2+\left(\frac\mu\rho\right)^2\le1.
+ \label{eq:moment-circle}\tag{2.4}
+\]
+\end{lemma}
+
+\begin{proof}
+For real \(x,y\),
+\[
+ \abs{x-y}^3=6\int_{\R}
+ \bigl[(x-t)_+(t-y)_+ +(y-t)_+(t-x)_+\bigr]\dd t.
+\]
+Taking expectations, using independence, splitting the integral at zero,
+and applying \(\E X=0\) gives
+\[
+ m=12\int_0^\infty\bigl(A^2+B^2+tA+tB\bigr)\dd t.
+\]
+Fubini's theorem gives
+\(\int_0^\infty tA(t)\dd t=\E X_+^3/6\) and the analogous identity
+for \(B\), proving \eqref{eq:m-stop}.
+
+If \(0\le y\le z\), direct integration gives
+\[
+ 3\int_0^\infty(y-t)_+(z-t)_+\dd t
+ =\frac32y^2z-\frac12y^3
+ \le\frac12(yz^2+y^2z).
+\]
+Averaging independent copies proves \eqref{eq:hardy}.  Since
+\(\E X_+^2+\E X_-^2=1\), it follows that
+\(m-2\rho\le4r_0=2\E\abs X\), and \eqref{eq:r-range} follows from
+\(\E\abs X\le1\) and Lyapunov's inequality \(\rho\ge1\).
+
+To prove \eqref{eq:moment-circle}, write
+\[
+ a_j:=\E X_+^j,\qquad b_j:=\E X_-^j\quad(j=2,3).
+\]
+Positive semidefiniteness of the covariance matrix of \((X_+,X_-)\),
+together with \(X_+X_-=0\), gives \(a_2b_2\ge r_0^2\).
+Cauchy's inequality gives \(a_2^2\le r_0a_3\) and
+\(b_2^2\le r_0b_3\), hence \(r_0\le\sqrt{a_3b_3}\).  Therefore
+\[
+ m-2\rho\le4\sqrt{a_3b_3}
+ =2\sqrt{\rho^2-\mu^2}.
+\]
+Division by \(2\rho\) proves \eqref{eq:moment-circle}.
+\end{proof}
+
+The range in \eqref{eq:r-range} sets the scale in the modulus estimate.  At the
+same time, \eqref{eq:moment-circle} shows that a larger value of \(r-1\) forces
+the normalized third moment to be smaller.  The next result transfers this
+restriction to the sine remainder at every frequency.
+
+\subsection{A bound for the sine remainder}
+
+Since \(\E X=0\), the imaginary part of
+\(\E e^{iuX}-(1-u^2/2)\) is \(\E(\sin(uX)-uX)\).  The same ratio \(r\)
+controls this quantity uniformly in \(u\).
+
+\begin{lemma}[Bound for the sine remainder]\label{lem:sine-circle}
+For every \(u\in\R\),
+\[
+ \abs{\E(\sin(uX)-uX)}
+ \le\frac{\rho\abs u^3}{6}\sqrt{1-(r-1)^2}.
+ \label{eq:sine-circle}\tag{2.5}
+\]
+\end{lemma}
+
+\begin{proof}
+It is enough to take \(u>0\).  Define
+\[
+ J:=\int_0^\infty t(A+B)\dd t=\frac\rho6,
+ \quad E_0:=\int_0^\infty(A^2+B^2)\dd t,
+ \quad H_u:=\frac1u\int_0^\infty\sin(ut)(A-B)\dd t.
+\]
+For a centered two-point law, these normalized quantities satisfy
+\(E_0^2+H_u^2\le J^2\).  Stop-loss functions are affine under mixtures, so
+Minkowski's inequality carries the same constraint to an arbitrary centered
+law.  We now make the mixture explicit.
+
+Let \(\alpha_+\) be the restriction
+of the law of \(X\) to \((0,\infty)\), and let \(\alpha_-\) be the reflection
+of its restriction to \(( -\infty,0)\).  Centering gives
+\[
+ \int a\,\alpha_+(\dd a)=\int b\,\alpha_-(\dd b)=r_0,
+\]
+and the variance-one assumption implies \(r_0>0\).
+On \((0,\infty)^2\), define
+\[
+ \nu(\dd a,\dd b):=\frac{a+b}{r_0}\,
+ \alpha_+(\dd a)\alpha_-(\dd b),
+\]
+and add mass \(\Pp\{X=0\}\) at a zero component.  For each \((a,b)\), let
+\(X_{a,b}\) take the values \(a\) and \(-b\) with probabilities
+\(b/(a+b)\) and \(a/(a+b)\).  A direct calculation shows that the law of
+\(X\) is the \(\nu\)-mixture of these centered two-point laws and the zero
+law.  In particular, their stop-loss functions mix linearly to \((A,B)\).
+
+For one such component, let \(J_{a,b},E_{a,b},H_{a,b}\) denote the three
+quantities above, and put \(x=ua\), \(y=ub\).  Direct calculation gives
+\[
+ \frac{E_{a,b}}{J_{a,b}}=\frac{2xy}{x^2+y^2},\qquad
+ \frac{H_{a,b}}{J_{a,b}}
+ =-\frac{6(y\sin x-x\sin y)}{xy(x^2+y^2)}.
+\]
+For \(z>0\),
+\[
+ \left|\frac{\dd}{\dd(z^2)}\frac{\sin z}{z}\right|
+ =\frac{\abs{z\cos z-\sin z}}{2z^3}\le\frac16,
+\]
+because
+\[
+ \abs{z\cos z-\sin z}
+ =\left|\int_0^z t\sin t\dd t\right|
+ \le\int_0^z t^2\dd t=\frac{z^3}{3}.
+\]
+It follows that \(E_{a,b}^2+H_{a,b}^2\le J_{a,b}^2\).  Jensen's inequality
+applied at each \(t\), together with linearity of the mixture, gives
+\[
+ E_0\le\int E_{a,b}\nu(\dd a,\dd b),\qquad
+ H_u=\int H_{a,b}\nu(\dd a,\dd b),\qquad
+ J=\int J_{a,b}\nu(\dd a,\dd b).
+\]
+Minkowski's inequality in \(\R^2\) now proves
+\[
+ \sqrt{E_0^2+H_u^2}
+ \le\int\sqrt{E_{a,b}^2+H_{a,b}^2}\nu(\dd a,\dd b)
+ \le J.
+\]
+
+Two integrations of the sine remainder yield
+\(\E(uX-\sin(uX))=u^3H_u\).  By \eqref{eq:m-stop},
+\(E_0/J=r-1\).  Thus \(E_0^2+H_u^2\le J^2\) gives
+\(\abs{H_u}\le(\rho/6)\sqrt{1-(r-1)^2}\), proving
+\eqref{eq:sine-circle}.
+\end{proof}
+
+Thus the symmetrized third-moment ratio governs both quantities needed below:
+it sets the scale of the modulus estimate and sharpens the bound on the sine
+remainder.
+
+\section{Comparison with the Gaussian characteristic function}%
+\label{sec:cf-bounds}
+
+Let \(f(u):=\E e^{iuX}\).  At each frequency, the smoothing argument will use
+both a bound for \(\abs{f(u)}\) and a bound for
+\(\abs{f(u)-e^{-u^2/2}}\).  We derive both in terms of the same ratio \(r\).
+
+For the modulus bound, put
+\[
+ g(v):=\cos v-1+\frac{v^2}{2},\qquad
+ \kappa:=\max_{v>0}\frac{g(v)}{v^3}.
+\]
+Exact alternating-series bounds and interval Newton verification give
+\[
+ 0.09916191350<\kappa<0.09916191353
+\]
+and a unique maximizer \(\vartheta\) satisfying
+\[
+ 3.99589567<\vartheta<3.99589570.
+\]
+We use Prawitz's piecewise characteristic-function minorant
+\cite{prawitz1975cf}, retaining the scale \(r\rho\) controlled in Section~2:
+\[
+ q(v):=
+ \begin{cases}
+ \frac12-\kappa v,&0\le v\le\vartheta,\\[1mm]
+ \dfrac{1-\cos v}{v^2},&\vartheta<v\le2\pi,\\[2mm]
+ 0,&v>2\pi.
+ \end{cases}
+ \label{eq:q-def}\tag{3.1}
+\]
+
+\begin{lemma}\label{lem:q}
+The function \(q\) is convex and nonincreasing, and
+\[
+ q(v)\le\frac{1-\cos v}{v^2}\qquad(v>0).
+\]
+Consequently,
+\[
+ \abs{f(u)}^2\le1-2u^2q(r\rho\abs u).
+ \label{eq:modulus}\tag{3.2}
+\]
+\end{lemma}
+
+\begin{proof}
+The definition of \(\kappa\) gives the minorant on the first interval.
+At \(\vartheta\), equality and equality of the first derivatives hold.
+For \(\psi(v)=(1-\cos v)/v^2\),
+\[
+ \psi''(v)=\frac{v^2\cos v-4v\sin v+6(1-\cos v)}{v^4}.
+\]
+The numerator is nonnegative on \([\vartheta,2\pi]\), and
+\(\psi'(2\pi)=0\).  The required breakpoint and sign statements are verified
+exactly in the Lean development.  Hence the three pieces join with
+nondecreasing slopes and \(q\) is convex and nonincreasing.
+
+Let \(Y=X-X'\).  Since \(\E Y^2=2\), the measure \(Y^2\dd\Pp/2\) is a
+probability measure.  Jensen's inequality gives
+\begin{align*}
+ 1-\abs{f(u)}^2
+ &=\E(1-\cos(uY))\\
+ &\ge2u^2q\left(\abs u\frac{\E\abs Y^3}{\E Y^2}\right)
+ =2u^2q(r\rho\abs u),
+\end{align*}
+which is \eqref{eq:modulus}.
+\end{proof}
+
+We next bound the difference from the Gaussian characteristic function.
+After normalization by \(\rho\abs u^3\), the ordinary third-order Taylor bound
+places the remainder in a disk of radius \(1/6\), while
+Lemma~\ref{lem:sine-circle} restricts its imaginary part according to \(r\).
+The corresponding normalized Gaussian correction lies on the real axis, so
+the largest possible distance is a two-dimensional constrained maximum.  Set
+\[
+ \beta(r):=\frac16\sqrt{1-(r-1)^2},\qquad d_0:=\frac16,
+\]
+and, for \(c\ge0\), define
+\[
+ \epsilon_\rho(c):=
+ \begin{cases}
+ \displaystyle\frac{\rho^2}{c^3}
+ \left(e^{-c^2/(2\rho^2)}-1+\frac{c^2}{2\rho^2}\right),&c>0,\\[2mm]
+ 0,&c=0.
+ \end{cases}
+\]
+Let
+\[
+ \Xi(r):=\{0,\kappa\}\cup
+ \left(\left\{\frac{r-1}{6}\right\}\cap[0,\kappa]\right)
+\]
+and
+\[
+ D(\rho,r,c)^2:=\max_{x\in\Xi(r)}
+ \left\{(x-\epsilon_\rho(c))^2+
+ \min\bigl(\beta(r)^2,d_0^2-x^2\bigr)\right\}.
+ \label{eq:D-def}\tag{3.3}
+\]
+Thus \(D(\rho,r,c)\) is the greatest possible distance from the normalized
+Gaussian correction \(\epsilon_\rho(c)\) to a Taylor remainder satisfying the
+disk and imaginary-part bounds; \(\Xi(r)\) lists the only real parts at which
+the maximum can occur.
+
+\begin{lemma}\label{lem:one-step}
+For every \(u\in\R\), with \(c=\rho\abs u\),
+\[
+ \abs{f(u)-e^{-u^2/2}}\le\rho\abs u^3D(\rho,r,c).
+ \label{eq:one-step}\tag{3.4}
+\]
+\end{lemma}
+
+\begin{proof}
+The case \(u=0\) is immediate.  Suppose \(u\ne0\), and set
+\[
+ z:=\frac{f(u)-(1-u^2/2)}{\rho\abs u^3},
+\]
+the definition of \(\kappa\), Lemma~\ref{lem:sine-circle}, and the
+third-order Taylor remainder give
+\[
+ 0\le\Re z\le\kappa,\qquad
+ \abs{\Im z}\le\beta(r),\qquad \abs z\le d_0.
+\]
+Moreover,
+\[
+ \frac{e^{-u^2/2}-(1-u^2/2)}{\rho\abs u^3}
+ =\epsilon_\rho(c).
+\]
+Thus the normalized left side of \eqref{eq:one-step} is the distance
+from the nonnegative real point \(\epsilon_\rho(c)\) to the intersection
+of a vertical strip, a horizontal strip, and the disk of radius \(d_0\).
+For fixed real part \(x\), the largest squared imaginary part is
+\(\min(\beta(r)^2,d_0^2-x^2)\).  The squared distance can change form
+only at \(x=(r-1)/6\), and its maximum on each piece is attained at an
+endpoint.  These are exactly the points in \(\Xi(r)\), proving
+\eqref{eq:D-def} and \eqref{eq:one-step}.
+\end{proof}
+
+The two estimates needed for smoothing are now explicit:
+\eqref{eq:modulus} bounds the modulus, and \eqref{eq:one-step} bounds the
+deviation from the Gaussian, with their dependence on the same \(r\)
+preserved.
+
+\section{Prawitz smoothing and the
+\texorpdfstring{\(0.45\)}{0.45} bound}\label{sec:prawitz}
+
+Set \(L:=\rho/\sqrt n\).  When \(L\) is large, a distribution-free
+Kolmogorov bound is sufficient.  When \(L\) is smaller, Prawitz smoothing
+turns the two characteristic-function estimates from
+Section~\ref{sec:cf-bounds} into the desired distributional bound.  We begin
+with the large-\(L\) regime.
+
+\begin{lemma}\label{lem:universal}
+If \(W\) is centered and has variance one, then
+\[
+  \sup_x\abs{\Pp\{W\le x\}-\Phi(x)}\le\frac{14}{25}=0.56.
+\]
+\end{lemma}
+
+\begin{proof}
+Cantelli's inequality gives, for \(a\ge0\),
+\[
+ \Pp\{W\ge a\}\le\frac1{1+a^2},\qquad
+ \Pp\{W\le-a\}\le\frac1{1+a^2}.
+\]
+Hence the Kolmogorov distance is at most
+\[
+ \max\left\{\frac12,\sup_{a\ge0}
+ \left(\frac1{1+a^2}-\Phi(-a)\right)\right\}.
+\]
+For \(a\ge1\), the second term is at most \(1/2\).  For
+\(0\le a\le1\), the bound \((2\pi)^{-1/2}<2/5\) yields
+\[
+ \frac1{1+a^2}-\Phi(-a)
+ \le \frac1{1+a^2}-\frac12+\frac{2a}{5}.
+\]
+The last expression is at most \(14/25\) exactly when
+\[
+ 3-20a+53a^2-20a^3\ge0.
+\]
+On \([0,1/4]\) the left side is at least
+\(3-20a+48a^2>0\), and on \([1/4,1/2]\) it is at least
+\(3-20a+43a^2>0\).
+On \([1/2,1]\), write the polynomial as
+\(3+a(-20a^2+53a-20)\); the concave quadratic in parentheses is positive
+at both endpoints.  This proves the claim.
+\end{proof}
+
+Applied to \(W=S_n\), Lemma~\ref{lem:universal} proves
+Theorem~\ref{thm:main} whenever \(L\ge56/45\), since
+\(0.56=0.45(56/45)\).  It remains to consider
+\[
+  1\le\rho<\frac{56}{45}\sqrt n.
+\]
+
+For this range we use the following form of the Prawitz smoothing inequality.
+For \(0<t<1\), define the Prawitz kernel
+\[
+ \begin{aligned}
+ K(t)&:=\frac{1-t}{2}
+ +\frac{i}{2}\left((1-t)\cot(\pi t)+\frac1\pi\right),\\
+ K(-t)&:=\overline{K(t)}.
+ \end{aligned}
+ \label{eq:kernel}\tag{4.1}
+\]
+The following normalization of the Prawitz smoothing inequality converts
+characteristic-function estimates into a bound on Kolmogorov distance
+\cite{prawitz1972}.  It is equivalent to the filter normalization recorded in
+\cite[Section~2]{pinelis2013}.
+
+\begin{lemma}[Prawitz smoothing inequality]\label{lem:prawitz}
+Let \(Y\) be an integrable real random variable, with distribution function
+\(F\) and characteristic function \(h\).
+For \(T>0\) and \(0<t_0<1\),
+\begin{align}
+ \sup_x\abs{F(x)-\Phi(x)}
+ \le{}&2\int_0^{t_0}\abs{K(t)}
+       \abs{h(Tt)-e^{-T^2t^2/2}}\dd t \notag\\
+ &+2\int_{t_0}^1\abs{K(t)}\abs{h(Tt)}\dd t \notag\\
+ &+2\int_0^{t_0}\left|K(t)-\frac{i}{2\pi t}\right|
+       e^{-T^2t^2/2}\dd t \notag\\
+ &+\frac1\pi\int_{t_0}^{\infty}e^{-T^2t^2/2}\frac{\dd t}{t}.
+ \label{eq:prawitz}\tag{4.2}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Let \(J(x)=(\sin(\pi x)/(\pi x))^2\), with its removable value at zero,
+and let \(H\) be the odd band-limited function in Prawitz's construction.
+The pointwise estimate
+\(\abs{\operatorname{sgn}(x)-H(x)}\le J(x)\) gives
+\[
+ B_-(x):=\frac{1-H(x)-J(x)}2
+ \le \mathbf 1_{(-\infty,0]}(x)
+ \le \frac{1-H(x)+J(x)}2=:B_+(x).
+\]
+The nonconstant Fourier transforms of \(B_+\) and \(B_-\) are supported on
+\([-1,1]\); under the normalization in \eqref{eq:kernel}, they are \(K(t)\)
+and \(-K(-t)\), respectively.
+
+Apply these bounds to \(T(Y-x)/(2\pi)\), take expectations, and use Fourier
+inversion.  The finite first moment removes the apparent singularity at zero:
+\[
+ \abs{h(u)-1}\le \abs u\,\E\abs Y,
+\]
+so the zero-frequency constant may be subtracted before passing to the
+symmetric Fourier limit.  Subtracting the exact normal inversion formula,
+splitting the frequencies at \(t_0\), and using conjugate symmetry gives the
+first three terms in \eqref{eq:prawitz}; the remaining normal frequencies give
+the last integral.  Applying the same argument to \(-Y\) supplies the opposite
+CDF inequality and completes the absolute-value bound.
+\end{proof}
+
+We apply Lemma~\ref{lem:prawitz} to the law of \(S_n\), which is integrable
+under the third-moment assumption.  With
+\(L=\rho/\sqrt n\) as above, choose
+\[
+ T:=\frac{2\pi}{rL},\qquad t_0:=\frac{19}{50}.
+ \label{eq:parameters}\tag{4.3}
+\]
+For \(0\le t\le1\), set
+\begin{align*}
+ u(t)&:=\frac{2\pi t}{r\rho},\\
+ a(t)&:=\pos{1-2u(t)^2q(2\pi t)}^{1/2},
+ &b(t)&:=e^{-u(t)^2/2},\\
+ M(t)&:=a(t)^n,
+ &N(t)&:=b(t)^n=e^{-T^2t^2/2},
+\end{align*}
+and
+\[
+R(t):=\min\left\{
+ n\rho u(t)^3D\left(\rho,r,\frac{2\pi t}{r}\right)
+ \max(a(t),b(t))^{n-1},\ M(t)+N(t)\right\}.
+\]
+Here \(a(t)\) and \(b(t)\) are the single-summand characteristic-function and
+Gaussian bounds; \(M(t)\) and \(N(t)\) are their \(n\)-fold counterparts.  The
+two entries in the minimum defining \(R(t)\) are, respectively, the bound
+obtained from the difference-of-powers identity and the triangle-inequality
+bound.
+With these bounds, the right-hand side of \eqref{eq:prawitz} becomes
+\begin{align}
+ \mathcal U(n,\rho,r):={}&
+ 2\int_0^{t_0}\abs{K(t)}R(t)\dd t
+ +2\int_{t_0}^1\abs{K(t)}M(t)\dd t \notag\\
+ &+2\int_0^{t_0}\left|K(t)-\frac{i}{2\pi t}\right|N(t)\dd t
+ +\frac1\pi\int_{t_0}^{\infty}N(t)\frac{\dd t}{t}.
+ \label{eq:U-def}\tag{4.4}
+\end{align}
+
+\begin{lemma}[Exact scalar bound]\label{lem:numerical}
+For every integer \(n\ge1\), every
+\[
+ 1\le\rho\le\frac{56}{45}\sqrt n,
+ \qquad 1\le r\le1+\frac1\rho,
+ \label{eq:num-domain}\tag{4.5}
+\]
+one has
+\[
+ \mathcal U(n,\rho,r)\le0.4495\,\frac\rho{\sqrt n}.
+ \label{eq:num-bound}\tag{4.6}
+\]
+\end{lemma}
+
+This is the only exhaustive computer-assisted step.  Section~\ref{sec:certificate}
+proves it by exact interval arithmetic over the entire domain
+\eqref{eq:num-domain}.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+If \(L\ge56/45\), Lemma~\ref{lem:universal} gives
+\(\Delta_n\le0.56\le0.45L\).  Suppose \(L<56/45\).  Then
+Lemma~\ref{lem:stoploss} places \((n,\rho,r)\) in
+\eqref{eq:num-domain}.
+
+The characteristic function of \(S_n\) is
+\(f_n(t)=f(t/\sqrt n)^n\).  With the choices in
+\eqref{eq:parameters}, Lemma~\ref{lem:q} gives
+\[
+ \abs{f(u(t))}\le a(t),\qquad \abs{f_n(Tt)}\le M(t).
+\]
+Lemma~\ref{lem:one-step} and
+\(\abs{z^n-w^n}\le n\abs{z-w}\max(\abs z,\abs w)^{n-1}\) give
+the first bound in the definition of \(R(t)\); the triangle inequality
+gives the second.  Lemma~\ref{lem:prawitz} therefore yields
+\[
+ \Delta_n\le\mathcal U(n,\rho,r).
+\]
+Lemma~\ref{lem:numerical} now gives
+\[
+ \Delta_n\le0.4495L<0.45L,
+\]
+which completes the proof.
+\end{proof}
+
+\section{Exact verification of the scalar inequality}\label{sec:certificate}
+
+Lemma~\ref{lem:numerical} is proved by a finite exact certificate.  The
+certificate represents a cover of the continuous parameter domain, and a
+proved-sound interval checker establishes the required upper bound on every
+cell of that cover.
+
+\subsection{Exact interval bounds}
+
+All numerical endpoints are dyadic rationals at precision \(2^{-48}\).
+Addition, subtraction, multiplication, division, squaring, nonnegative square
+root, and integer powers use proved outward-rounding rules.  Alternating Taylor
+polynomials of degrees \(24\) and \(25\), together with exact range reduction,
+enclose the exponential and trigonometric functions used by the checker.
+The exponential-integral tail is bounded by a convex composite trapezoid rule
+on \([0,24]\) and a proved infinite-tail estimate.
+
+Every integral in \eqref{eq:U-def} is replaced by an upper Darboux sum.  Lean
+proves the generic implication
+\[
+ \text{cellwise interval containment}
+ \quad\Longrightarrow\quad
+ \int_J F(t)\dd t\le
+ \sum_{I\in\mathcal P}\abs I\,\sup [F](I),
+\]
+including the outward-rounded accumulation used by the interval checker.
+Removable singularities at \(t=0\) and \(t=1\) are handled algebraically before
+interval evaluation.
+
+\subsection{Covering the continuous domain}
+
+For each \(1\le n<100\), the parameter domain is mapped to the unit square by
+\[
+ \rho=1+y\left(\frac{56}{45}\sqrt n-1\right),
+ \qquad r=1+\frac z\rho,
+ \qquad 0\le y,z\le1.
+\]
+A prefix code describes a binary subdivision tree.  A leaf is accepted only
+when the exact interval upper bound is below \(0.4495\).  Lean proves that an
+accepted tree covers the entire square and that every represented point
+satisfies \eqref{eq:num-bound}.
+
+For \(n\ge100\), write \(L=\rho/\sqrt n\).  The bounds
+\(a(t),b(t)\le e^{-u(t)^2q(2\pi t)}\), together with
+\((n-1)/n\ge99/100\), give
+\[
+ \max(a(t),b(t))^{n-1}
+ \le \exp\left\{-\frac{99}{100}
+ \frac{(2\pi t)^2q(2\pi t)}{r^2L^2}\right\}.
+\]
+This removes the explicit \(n\)-dependence from the telescoping term.
+Monotonicity and convexity reduce the remaining dependence on \(\rho\).  The
+checker covers three compact regions: \(0\le L\le1/16\), \(1\le r\le2\);
+\(1/16\le L\le1/10\), \(1\le r\le2\); and
+\(1/10\le L\le56/45\), \(1\le r\le1+(10L)^{-1}\).  Since \(\rho\ge1\),
+\(n\ge100\), and \(r\le1+1/\rho\), their union contains every admissible pair.
+The endpoint \(L=0\) uses a proved removable-limit formula.  Checker soundness
+then gives \eqref{eq:num-bound} throughout each accepted covering tree.
+
+In the upper region, the interval parameter map is intersected with the proved
+constraint \(r\le2\) before its tree is applied, so the endpoint is covered
+without enlarging the admissible domain.
+
+The complete Lean source and the exact certificate data are available at
+\href{https://github.com/haonan-xiao/iid-berry-esseen}%
+{\nolinkurl{github.com/haonan-xiao/iid-berry-esseen}}.
+
+The probability-theoretic reduction, moment identities,
+characteristic-function estimates, smoothing argument, checker soundness, and
+covering theorems are formalized in Lean~4 \cite{demoura2021lean4} on top of
+Mathlib \cite{mathlib2020}.  Only the prefix codes, not the program that
+searches for them, enter the proof.  Lean recomputes every accepted closed
+Boolean certificate with \texttt{native\_decide}.  The preceding formal
+arguments are kernel-checked; certificate evaluation additionally trusts
+Lean's native compiler through the axioms generated by
+\texttt{native\_decide}.  The source contains no unproved placeholders or
+user-declared axioms.
+
+This proves Lemma~\ref{lem:numerical} on the entire admissible domain and hence
+completes the proof of Theorem~\ref{thm:main}.  The role of the certificate is
+precise: it verifies the final uniform scalar inequality.  The dependence on
+\(r\) that produces the improved bound enters earlier through
+\eqref{eq:modulus} and \eqref{eq:one-step}.
+
+\section*{AI disclosure}
+
+OpenAI Codex autonomously developed the proof, formalized it in Lean, generated
+the exact numerical certificates, and drafted the initial manuscript.  The
+authors supplied the research question and candidate materials, reviewed the
+resulting argument, references, and verification record, and prepared this
+version for arXiv.
+
+\begingroup
+\footnotesize
+\raggedright
+\let\oldthebibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+  \oldthebibliography{#1}%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parsep}{0pt}%
+}
+\bibliographystyle{plain}
+\bibliography{references}
+\endgroup
+
+\end{document}

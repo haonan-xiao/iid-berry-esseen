@@ -1,0 +1,17 @@
+/.lake/
+/build/
+
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+paper/*.pdf
+!paper/berry-esseen-045.pdf
+
+.DS_Store
+Thumbs.db

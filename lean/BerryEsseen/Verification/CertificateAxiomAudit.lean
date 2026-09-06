@@ -1,0 +1,43 @@
+import BerryEsseen.Certificates.Finite.Batches.Range01_10
+import BerryEsseen.Certificates.Finite.Batches.Range11_20
+import BerryEsseen.Certificates.Finite.Batches.Range21_30
+import BerryEsseen.Certificates.Finite.Batches.Range31_40
+import BerryEsseen.Certificates.Finite.Batches.Range41_50
+import BerryEsseen.Certificates.Finite.Batches.Range51_60
+import BerryEsseen.Certificates.Finite.Batches.Range61_70
+import BerryEsseen.Certificates.Finite.Batches.Range71_80
+import BerryEsseen.Certificates.Finite.Batches.Range81_90
+import BerryEsseen.Certificates.Finite.Batches.Range91_99
+import BerryEsseen.Certificates.Small.LowerNativeCheck
+import BerryEsseen.Certificates.Small.UpperNativeCheck
+import BerryEsseen.Certificates.Large.MiddleFuel5ShardBatch01NativeCheck
+import BerryEsseen.Certificates.Large.MiddleFuel5ShardBatch02NativeCheck
+import BerryEsseen.Certificates.Large.MiddleFuel5ShardBatch03NativeCheck
+import BerryEsseen.Certificates.Large.MiddleFuel5ShardBatch04NativeCheck
+import BerryEsseen.Certificates.Large.UpperFuel8NativeCheck
+import BerryEsseen.Interval.Large.MiddleFuel5ShardedComposition
+
+/-!
+# Verification / Certificate Axiom Audit
+-/
+
+open BerryEsseen
+
+#print axioms bound4395FiniteTargetAwareBatch01_10_checked
+#print axioms bound4395FiniteTargetAwareBatch11_20_checked
+#print axioms bound4395FiniteTargetAwareBatch21_30_checked
+#print axioms bound4395FiniteTargetAwareBatch31_40_checked
+#print axioms bound4395FiniteTargetAwareBatch41_50_checked
+#print axioms bound4395FiniteTargetAwareBatch51_60_checked
+#print axioms bound4395FiniteTargetAwareBatch61_70_checked
+#print axioms bound4395FiniteTargetAwareBatch71_80_checked
+#print axioms bound4395FiniteTargetAwareBatch81_90_checked
+#print axioms bound4395FiniteTargetAwareBatch91_99_checked
+#print axioms variableAlphaSmallLowerConcreteCertificate_checked
+#print axioms variableAlphaSmallUpperConcreteCertificate_checked
+#print axioms Bound4395LargeMiddleFuel5ShardBatch01NativeCheckCertificate_checked
+#print axioms Bound4395LargeMiddleFuel5ShardBatch02NativeCheckCertificate_checked
+#print axioms Bound4395LargeMiddleFuel5ShardBatch03NativeCheckCertificate_checked
+#print axioms Bound4395LargeMiddleFuel5ShardBatch04NativeCheckCertificate_checked
+#print axioms bound4395LargeUpperFuel8ConcreteCertificate_checked
+#print axioms bound4395LargeMiddleFuel5ShardedFullCodeParsed

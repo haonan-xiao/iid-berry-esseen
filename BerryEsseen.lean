@@ -1,9 +1,8 @@
-import BerryEsseen.Theorem
+import BerryEsseen.Theorems.Bound04395
 
 /-!
-# Berry--Esseen constant 0.45
+# The i.i.d. Berry--Esseen bound 0.4395
 
-This root module exports the theorem `iidBerryEsseen45`. Its transitive imports
-contain the probability interface, analytic reduction, exact dyadic checker,
-continuous-domain coverage proof, and all finite certificate data.
+This entrypoint exports `BerryEsseen.iidBerryEsseen879_2000`.
+The module map and verification commands are documented in `FORMALIZATION.md`.
 -/

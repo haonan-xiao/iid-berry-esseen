@@ -1,0 +1,7 @@
+import BerryEsseen.Interval.Finite.AdaptiveDiagnosticCorrectness
+
+open BerryEsseen
+
+#print axioms findBound4395FiniteTargetAwareCoverFailure_eq_none_iff
+#print axioms findBound4395FiniteTargetAwareTreeFailure_eq_none_iff
+#print axioms bound4395FiniteTargetAwareDiagnostic_eq_allAccepted_iff

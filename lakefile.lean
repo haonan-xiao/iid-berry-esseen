@@ -16,6 +16,12 @@ require «StatLean» from git
   "https://github.com/StatLean/Stat-Lean.git" @
     "e1ef06bf52d2a8896439c5b59d982d9aad28a254"
 
+lean_lib Proof where
+  srcDir := "lean"
+  roots := #[]
+  globs := #[.submodules `BerryEsseen]
+
 @[default_target]
 lean_lib BerryEsseen where
-  roots := #[`BerryEsseen]
+  roots := #[]
+  globs := #[.one `BerryEsseen]

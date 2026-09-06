@@ -1,0 +1,14 @@
+import BerryEsseen.Theorems.NumericalAssembly
+
+/-!
+# Verification / Axiom Audit
+-/
+
+#print axioms BerryEsseen.bound4395FiniteAcceptedAt_true_iff
+#print axioms BerryEsseen.normalizedKolmogorovDistance_lt_879_2000_of_post044FiniteAcceptedAt
+#print axioms BerryEsseen.normalizedKolmogorovDistance_lt_879_2000_of_post044FiniteTargetAware
+#print axioms BerryEsseen.bound4395FiniteTargetAwareCover_sound
+#print axioms BerryEsseen.bound4395FiniteTargetAwareVerifyLeafTree_sound
+#print axioms BerryEsseen.normalizedKolmogorovDistance_lt_879_2000_of_post044OldFiniteTargetAware
+#print axioms BerryEsseen.targetAware_normalizedKolmogorovDistance_lt_879_2000
+#print axioms BerryEsseen.iidBerryEsseen879_2000_of_targetAware_certificates

@@ -1,0 +1,41 @@
+{
+  "archiveBytes": 51843097,
+  "archiveFilename": "subtree-final-evidence.tar.gz",
+  "archiveSha256": "fc8fc61454025e27ae5508ec438ecc56c5f6318d35b0b20f94b14783e7d9f84f",
+  "artifactCount": 22729,
+  "checkedModules": 2480,
+  "completeLeanReplay": true,
+  "evidenceManifestSha256": "6fe35a0e1f8038473e52edf8ad76dab93d48a1e2433cfd4daf8be6066fbb3a9f",
+  "executionRepairId": "9b9cd394df4899a99510a71b7e52b08d0bd934824712f05b21309a79d9f79587",
+  "finalReadySha256": "ae008b14798af6cfdd2322bc9a1c7c4404f7f01e3f98367bda14492ec8d4e865",
+  "finalTheorem": "BerryEsseen.iidBerryEsseen879_2000_targetAware",
+  "finalizerElapsedSeconds": 483,
+  "finalizerExitCode": "0:0",
+  "finalizerJobId": "12223064",
+  "freshNonNativeModules": 73,
+  "gateScope": "Computational and source-identity acceptance; human proof, manuscript, PDF and distribution gates are separately recorded in theory-proof.md.",
+  "independentlyVerifiedAt": "2026-09-06T05:53:32.502316+00:00",
+  "leanVersion": "4.29.1",
+  "literalInputCount": 102,
+  "localVerifierSha256": "723653461150542ff7f4220de034712ff57b793ee885b0e2a8fcc4c755a7de96",
+  "mathlibTag": "v4.29.1",
+  "nativeWitnesses": 2407,
+  "numericalSubtrees": 2309,
+  "parentSnapshotId": "76120b0d7d0b926c9c92f1e606ab9da45dd18ac62f9cb2a560b2299c8f785534",
+  "proofEvidence": false,
+  "schedulingHistory": {
+    "authorizedProductionWorkers": 60,
+    "originalArrayThrottle": 17,
+    "subtreePlanMaximumWorkers": 32
+  },
+  "schema": "berry-esseen-path2-local-acceptance-v1",
+  "snapshotId": "9c1e559233d9df46fffb39e0e4171ffaa2a89d1ea954ab816f7fa9844fbee546",
+  "standardAxioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "statleanCommit": "e1ef06bf52d2a8896439c5b59d982d9aad28a254",
+  "status": "PASS",
+  "target": "879/2000"
+}

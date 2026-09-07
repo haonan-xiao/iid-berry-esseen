@@ -1,7 +1,7 @@
-import BerryEsseen.BreakpointNumerics
-import BerryEsseen.DyadicElementary
-import BerryEsseen.PrawitzLargeN
-import BerryEsseen.SineCircle
+import BerryEsseen.Analysis.BreakpointNumerics
+import BerryEsseen.Interval.Arithmetic.ElementaryFunctions
+import BerryEsseen.Smoothing.Prawitz.LargeN
+import BerryEsseen.CharacteristicFunctions.SineRemainder
 
 /-!
 # Characteristic Functions / Exponential Modulus

@@ -1,4 +1,4 @@
-import BerryEsseen.Universal
+import BerryEsseen.Probability.UniversalBound
 
 open MeasureTheory ProbabilityTheory
 

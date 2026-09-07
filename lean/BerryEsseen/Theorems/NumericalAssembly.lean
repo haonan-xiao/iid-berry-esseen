@@ -2,7 +2,7 @@ import BerryEsseen.Theorems.CertificateImplication
 import BerryEsseen.Interval.Finite.AdaptiveFullCover
 import BerryEsseen.Interval.Small.SplitCover
 import BerryEsseen.Interval.Large.TargetCover
-import BerryEsseen.PrawitzNumericalCertificate
+import BerryEsseen.Smoothing.Prawitz.NumericalCertificate
 
 /-!
 # Theorems / Numerical Assembly

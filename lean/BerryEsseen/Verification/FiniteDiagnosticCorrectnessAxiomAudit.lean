@@ -1,4 +1,4 @@
-import BerryEsseen.Interval.Finite.AdaptiveDiagnosticCorrectness
+import BerryEsseen.Verification.Subdivision.DiagnosticCorrectness
 
 open BerryEsseen
 

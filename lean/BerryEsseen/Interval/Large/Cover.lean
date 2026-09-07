@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Large.Cache
-import BerryEsseen.DyadicPrawitzLargeNUpperLeafTree
+import BerryEsseen.Interval.Prawitz.LargeNUpperLeafTree
 
 /-!
 # Interval / Large / Cover

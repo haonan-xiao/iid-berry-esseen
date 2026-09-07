@@ -11,7 +11,7 @@ import source_layout
 class ReplayTests(unittest.TestCase):
     def test_namespaced_scheduler_and_resume(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root=Path(tmp); lean=root/'lean'; evidence=lean/'evidence'
+            root=Path(tmp); lean=root/'lean'; evidence=root/'evidence/verification'
             evidence.mkdir(parents=True)
             modules=['BerryEsseen.Moments.Test','BerryEsseen.Verification.FinalAxiomAudit']
             for module in modules:
@@ -21,7 +21,7 @@ class ReplayTests(unittest.TestCase):
             (root/'lake-manifest.json').write_text('{"packages":[]}')
             (evidence/'source-layout.json').write_text('{}')
             axioms=['Classical.choice','Quot.sound','propext']
-            (evidence/'final-axioms.txt').write_text('\n'.join(axioms)+'\n')
+            (evidence/'publication-axioms.txt').write_text('\n'.join(axioms)+'\n')
             order={'moduleOrder':modules,'imports':{modules[0]:[],modules[1]:[modules[0]]},'nativeTheorems':{}}
             calls=[]; output=root/'output'
             def fake_command(args,cwd,**kwargs):
@@ -53,6 +53,22 @@ class ReplayTests(unittest.TestCase):
 
 
 class TransformationTests(unittest.TestCase):
+    def test_relocated_literal_input(self):
+        entry={'oldPath':'Path2/Test.lean',
+               'newPath':'lean/BerryEsseen/Certificates/Data/Test.lean', 'title':'Test'}
+        mapping={'modules':{},'identifiers':{},
+                 'literalPaths':{'BerryEsseen/Input.lean':'lean/certificate-data/finite/N01.lean.txt'}}
+        actual=source_layout.transform(b'include_str "../BerryEsseen/Input.lean"',entry,mapping)
+        self.assertEqual(actual,b'include_str "../../../certificate-data/finite/N01.lean.txt"')
+
+    def test_shared_module_import_without_declaration_changes(self):
+        entry={'oldPath':'BerryEsseen/Example.lean',
+               'newPath':'lean/BerryEsseen/Probability/Example.lean','title':'Test'}
+        mapping={'modules':{'BerryEsseen.Interface':'BerryEsseen.Probability.Definitions'},'identifiers':{}}
+        original=b'import BerryEsseen.Interface\nnamespace BerryEsseen\ndef bound : Nat := 4395\nend BerryEsseen\n'
+        actual=source_layout.transform(original,entry,mapping)
+        self.assertEqual(actual,original.replace(b'import BerryEsseen.Interface',b'import BerryEsseen.Probability.Definitions'))
+
     def setUp(self):
         self.entry={'oldPath':'Path2/Test.lean','newPath':'lean/BerryEsseen/Moments/Test.lean','title':'Test'}
         self.mapping={'modules':{'OldModule':'BerryEsseen.Moments.Other'},'identifiers':{'path2Foo':'foo'}}

@@ -1,4 +1,4 @@
-import BerryEsseen.PrawitzLargeNSmallOmission
+import BerryEsseen.Smoothing.Prawitz.LargeNSmallOmission
 
 namespace BerryEsseen
 

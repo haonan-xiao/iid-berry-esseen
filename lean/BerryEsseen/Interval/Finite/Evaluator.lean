@@ -1,5 +1,5 @@
 import BerryEsseen.Smoothing.FiniteEnvelope
-import BerryEsseen.DyadicPrawitzFiniteIntegral
+import BerryEsseen.Interval.Prawitz.FiniteIntegral
 
 /-!
 # Interval / Finite / Evaluator

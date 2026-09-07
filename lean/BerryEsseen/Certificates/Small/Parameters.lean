@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Small.SplitCover
-import BerryEsseen.Certificates.Data.BaselinePartitions
+import BerryEsseen.Certificates.Data.LargeSamplePartitions
 
 /-!
 # Certificates / Small / Parameters

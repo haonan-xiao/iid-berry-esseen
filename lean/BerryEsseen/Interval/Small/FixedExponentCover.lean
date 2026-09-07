@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Small.FixedExponentIntegral
-import BerryEsseen.DyadicPrawitzLargeNSmallLeafTree
+import BerryEsseen.Interval.Prawitz.LargeNSmallLeafTree
 
 /-!
 # Interval / Small / Fixed Exponent Cover

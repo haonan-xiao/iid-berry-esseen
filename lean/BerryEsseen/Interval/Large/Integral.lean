@@ -1,6 +1,6 @@
 import BerryEsseen.Interval.Large.Cell
 import BerryEsseen.Interval.Finite.Functional
-import BerryEsseen.DyadicPrawitzLargeNTail
+import BerryEsseen.Interval.Prawitz.LargeNTail
 
 /-!
 # Interval / Large / Integral

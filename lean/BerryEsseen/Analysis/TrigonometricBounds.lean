@@ -1,4 +1,4 @@
-import BerryEsseen.DyadicPrawitzFiniteCache
+import BerryEsseen.Interval.Prawitz.FiniteCache
 import Mathlib.Analysis.Calculus.Taylor
 
 namespace BerryEsseen

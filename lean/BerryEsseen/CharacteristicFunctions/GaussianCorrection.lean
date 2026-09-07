@@ -1,4 +1,4 @@
-import BerryEsseen.DyadicPrawitzLargeNDisk
+import BerryEsseen.Interval.Prawitz.LargeNDisk
 
 /-!
 # Characteristic Functions / Gaussian Correction

@@ -1,4 +1,4 @@
-import BerryEsseen.Interval.Finite.AdaptiveFuelMonotonicity
+import BerryEsseen.Verification.Subdivision.FuelMonotonicity
 
 namespace BerryEsseen
 

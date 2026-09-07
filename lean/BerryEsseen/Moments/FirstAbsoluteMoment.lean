@@ -1,4 +1,4 @@
-import BerryEsseen.MomentGeometry
+import BerryEsseen.Moments.ThirdMomentRatio
 
 /-!
 # Moments / First Absolute Moment

@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Large.Integral
-import BerryEsseen.DyadicPrawitzLargeNCache
+import BerryEsseen.Interval.Prawitz.LargeNCache
 
 /-!
 # Interval / Large / Cache

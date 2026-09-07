@@ -45,12 +45,12 @@ dyadic interval certificates.
 | --- | --- |
 | `paper/` | Current PDF, LaTeX source and bibliography |
 | `BerryEsseen.lean` | Root entrypoint exporting the 0.4395 theorem |
-| `lean/BerryEsseen/` | Proof modules grouped into moments, characteristic functions, smoothing and interval arithmetic |
+| [lean/](lean/) | Proof modules, subdivision-tree inputs and verification scripts, with a directory guide |
 | `lean/BerryEsseen/Certificates/` | Generated certificates grouped by sample size and parameter region |
 | `lean/BerryEsseen/Theorems/`, `Verification/` | Final theorem assembly and axiom audits |
 | `FORMALIZATION.md` | Paper-to-Lean map, reproduction instructions and trust boundary |
 | `proof-guide.md` | Detailed human proof and correspondence with the Lean lemmas |
-| `lean/evidence/`, `evidence/` | Source manifests, relocation map and original execution evidence |
+| [evidence/](evidence/) | Build environment and verification records for the 0.4395 bound |
 
 The previous 0.45 note and formalization remain available in the
 [initial version](https://github.com/haonan-xiao/iid-berry-esseen/tree/fcdaa7923de9557fdb5744c9a89fa6665c7aab67).
@@ -70,7 +70,7 @@ A fresh full build is expensive because it evaluates the exact certificates.
 replay, lightweight checks, and the mathematical reading order. Run build
 commands from the repository root; there is one active Lake configuration.
 
-The original full numerical run passed. The publication layout has been
+The full numerical verification of the 0.4395 bound passed. The publication layout has been
 checked against those exact sources under the recorded renaming and comment
 changes, and selected renamed analytic modules have been freshly compiled.
 A full numerical replay of the renamed layout has not yet been performed.

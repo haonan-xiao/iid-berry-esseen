@@ -1,5 +1,5 @@
 import BerryEsseen.CharacteristicFunctions.FiniteSumComparison
-import BerryEsseen.PrawitzFiniteCell
+import BerryEsseen.Smoothing.Prawitz.FiniteCell
 
 /-!
 # Smoothing / Finite Envelope

@@ -2,7 +2,7 @@ import BerryEsseen.Smoothing.FiniteEnvelope
 import BerryEsseen.CharacteristicFunctions.ExponentialModulus
 import BerryEsseen.CharacteristicFunctions.GaussianCorrection
 import BerryEsseen.Interval.Finite.Evaluator
-import BerryEsseen.PrawitzLargeNIntegral
+import BerryEsseen.Smoothing.Prawitz.LargeNIntegral
 
 /-!
 # Smoothing / Large Sample Comparison

@@ -1,6 +1,6 @@
 import BerryEsseen.Smoothing.LargeSampleComparison
 import BerryEsseen.CharacteristicFunctions.GaussianCorrection
-import BerryEsseen.DyadicPrawitzLargeNCell
+import BerryEsseen.Interval.Prawitz.LargeNCell
 
 /-!
 # Interval / Large / Cell

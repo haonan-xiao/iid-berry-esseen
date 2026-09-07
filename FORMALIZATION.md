@@ -16,17 +16,19 @@ positive sample size, without an additional symmetry or support assumption.
 
 ## Reading the proof
 
-All modules below are under lean/BerryEsseen/. The shared analytic and dyadic
-modules remain directly in that directory; the additional arguments are
-grouped by mathematical role.
+All proof modules are under `lean/BerryEsseen/`, grouped by mathematical
+role. The main theorem is `Theorems.Bound04395`. Comparison results and
+diagnostic checks are separated under `Verification/`; they are not
+alternative versions of the main theorem.
 
 | Paper argument | Module or directory |
 | --- | --- |
-| Shared parameter and first absolute moment, Section 2 | MomentGeometry; Moments.FirstAbsoluteMoment |
+| Probability definitions and normalization | Probability.Definitions; Probability.SumMoments |
+| Shared parameter and first absolute moment, Section 2 | Moments.ThirdMomentRatio; Moments.FirstAbsoluteMoment |
 | Two-point and Gaussian comparisons, Section 3 | CharacteristicFunctions.TwoPointComparison, ComponentBounds, GaussianCorrection, ExponentialModulus |
 | Finite-sample smoothing, Section 4 | Smoothing.FiniteEnvelope; CharacteristicFunctions.FiniteSumComparison |
 | Large samples and variable exponent, Section 4 | Smoothing.LargeSampleComparison, VariableExponentComparison, UniversalSplit |
-| Interval bounds and soundness, Section 5 | Interval/Finite/, Interval/Large/, Interval/Small/ |
+| Interval bounds and soundness, Section 5 | Interval/Arithmetic/, Interval/Prawitz/, Interval/Finite/, Interval/Large/, Interval/Small/ |
 | Concrete certificates and assembly, Section 5 | Certificates/Finite/, Certificates/Small/, Certificates/Large/ |
 | Final numerical implication and theorem | Theorems.NumericalAssembly; Theorems.Bound04395 |
 | Final axiom audit | Verification.FinalAxiomAudit |
@@ -37,24 +39,42 @@ correspondence, including the parameter boundaries, tails and normalization.
 The main source groups are:
 
     lean/BerryEsseen/
+      Probability/               Laws, normalized sums and general bounds
       Analysis/                  Exponential and trigonometric inequalities
       Moments/                   First absolute moment constraints
       CharacteristicFunctions/   Component, modulus and comparison bounds
       Smoothing/                 Finite- and large-sample bounds
       Interval/
+        Arithmetic/              Dyadic arithmetic and integration
+        Prawitz/                 Kernel bounds and fixed-exponent cells
         Finite/ Large/ Small/    Evaluators and soundness
       Certificates/
         Data/                    Partition inputs
         Finite/N01/ ... N99/      Per-sample-size assembly and subtrees
         Finite/Batches/           Assembly over sample-size ranges
         Large/ Small/            Large-sample parameter regions
-      Theorems/                  Final probability statements
-      Verification/              Axiom and interface audits
+      Theorems/                  The 0.4395 theorem and its assembly
+      Verification/
+        Comparisons/             Implications between bound statements
+        Subdivision/             Diagnostic correctness and fuel monotonicity
+        ...                      Axiom audits
 
 There are 2,309 generated numerical subtree modules. These are individual
 finite computations, not 2,309 separate mathematical arguments. Read the
 evaluator and coverage proofs before opening individual certificate shards.
-The historical 0.45 aggregate is Theorems.Bound045, not the default target.
+
+The 102 text inputs used to recover subdivision trees are in
+`lean/certificate-data/`, outside the module tree. They are read by
+`Certificates.Data.FinitePartitions` and
+`Certificates.Data.LargeSamplePartitions`, not compiled as old proof modules.
+The 14 unused 0.45 aggregate modules have been removed from this version;
+the published 0.45 proof remains available in Git history.
+
+`Verification.Comparisons.CertificateImplication` retains the conditional
+0.44 statement used by the comparison checks.
+`Verification.Comparisons.ConclusionMonotonicity` verifies that the 0.4395
+conclusion implies the weaker 0.44 and 0.45 conclusions. Neither module
+is imported by the main theorem.
 
 ## Build and replay
 
@@ -81,25 +101,24 @@ The lightweight source check does not execute Lean:
     python lean/scripts/replay.py --check-sources
 
 It compares the publication sources with the immutable executed-source
-archive using lean/evidence/source-layout.json. Only module paths,
+archive using evidence/verification/source-layout.json. Only module paths,
 identifiers, relative literal-input paths and comments may change.
-Proof expressions and certificate strings are preserved, and all 102
-literal input files remain byte-identical.
+Proof expressions and certificate strings are preserved. This includes
+the 66 shared proof modules; all 102 literal input files remain byte-identical.
 
 ## Executed evidence and trust boundary
 
-The original full run passed all 2,480 module records. Its 73 non-native
+The full verification of the 0.4395 bound passed all 2,480 module records. Its 73 non-native
 modules were freshly re-elaborated against the successful native witnesses.
 The final axiom audit contained 2,407 native witnesses plus propext,
-Classical.choice and Quot.sound. Original records and names remain in
-lean/evidence/path2-4395/ and evidence/subtree-final-evidence.tar.gz.
-Their historical identifiers preserve traceability; they are not the
-current source layout.
+Classical.choice and Quot.sound. The records are described in
+[evidence/](evidence/), alongside the build environment used for that
+verification and the complete execution archive.
 
 The publication layout has passed the exact source-transformation check
 and selected fresh analytic builds. A complete numerical replay under
 the new names has not yet been performed. The mapped list in
-lean/evidence/final-axioms.txt is the expected inventory for that replay,
+evidence/verification/publication-axioms.txt is the expected inventory for that replay,
 not a newly executed axiom audit.
 
 Lean's kernel checks the analytic implications, interval containment,
@@ -108,13 +127,13 @@ native_decide, which additionally trusts Lean's native compiler.
 The accepted theorem closure contains no sorry or user-declared axioms.
 Partition search and scheduling verdicts are not theorem premises.
 
-The original archive has SHA-256
+The 0.4395 execution archive has SHA-256
 fc8fc61454025e27ae5508ec438ecc56c5f6318d35b0b20f94b14783e7d9f84f.
 To audit its execution evidence independently, choose a destination that
 does not already exist:
 
-    python evidence/tools/verify_path2_subtree_evidence.py --extract evidence/subtree-final-evidence.tar.gz --sha256 fc8fc61454025e27ae5508ec438ecc56c5f6318d35b0b20f94b14783e7d9f84f --destination .runtime/accepted-evidence --snapshot-id 9c1e559233d9df46fffb39e0e4171ffaa2a89d1ea954ab816f7fa9844fbee546
+    python lean/scripts/verification/verify_archive.py --extract evidence/subtree-final-evidence.tar.gz --sha256 fc8fc61454025e27ae5508ec438ecc56c5f6318d35b0b20f94b14783e7d9f84f --destination .runtime/accepted-evidence --snapshot-id 9c1e559233d9df46fffb39e0e4171ffaa2a89d1ea954ab816f7fa9844fbee546
 
-This checks original sources, imports, objects, literal inputs, logs,
+This checks the executed sources, imports, objects, literal inputs, logs,
 exit codes and fresh assembly. Paths and job identifiers in the archive
 are historical evidence, not prerequisites for portable reproduction.

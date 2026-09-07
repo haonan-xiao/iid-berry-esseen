@@ -1,7 +1,7 @@
 import BerryEsseen.Interval.Small.FixedExponentCell
 import BerryEsseen.Interval.Finite.Functional
 import BerryEsseen.Analysis.TailBounds
-import BerryEsseen.DyadicPrawitzLargeNSmallTail
+import BerryEsseen.Interval.Prawitz.LargeNSmallTail
 
 /-!
 # Interval / Small / Fixed Exponent Integral

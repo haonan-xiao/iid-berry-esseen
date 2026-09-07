@@ -1,5 +1,5 @@
 import BerryEsseen.Analysis.ExponentialBounds
-import BerryEsseen.DyadicPrawitzLargeNSmallTail
+import BerryEsseen.Interval.Prawitz.LargeNSmallTail
 
 /-!
 # Analysis / Tail Bounds

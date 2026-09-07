@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Finite.Functional
-import BerryEsseen.DyadicPrawitzFiniteCachedCover
+import BerryEsseen.Interval.Prawitz.FiniteCachedCover
 
 namespace BerryEsseen
 

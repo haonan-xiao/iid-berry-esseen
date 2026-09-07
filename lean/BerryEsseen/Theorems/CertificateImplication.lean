@@ -1,4 +1,4 @@
-import BerryEsseen.StandardizedSumMoments
+import BerryEsseen.Probability.SumMoments
 import BerryEsseen.Smoothing.UniversalSplit
 
 /-!

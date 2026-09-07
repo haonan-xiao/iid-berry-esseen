@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Finite.Integral
-import BerryEsseen.DyadicPrawitzGaussianTail
+import BerryEsseen.Interval.Prawitz.GaussianTail
 
 namespace BerryEsseen
 

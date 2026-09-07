@@ -28,9 +28,9 @@ def read(path: Path):
 
 def source_check(lean: Path) -> tuple[dict, dict]:
     source_layout.check(lean.parent)
-    evidence = lean/'evidence'
-    acceptance = read(evidence/'path2-4395/acceptance.json')
-    order = read(evidence/'build-order.json')
+    evidence = lean.parent/'evidence/verification'
+    acceptance = read(evidence/'acceptance.json')
+    order = read(evidence/'publication-build-order.json')
     modules = order['moduleOrder']
     if len(modules) != len(set(modules)) or len(modules) != acceptance['checkedModules']:
         raise ValueError('module inventory differs')
@@ -43,7 +43,7 @@ def source_check(lean: Path) -> tuple[dict, dict]:
         seen.add(module)
     expected_axioms = {'propext', 'Classical.choice', 'Quot.sound'} | {
         t+'._native.native_decide.ax_1_1' for t in order['nativeTheorems'].values()}
-    axioms = (evidence/'final-axioms.txt').read_text().splitlines()
+    axioms = (evidence/'publication-axioms.txt').read_text().splitlines()
     if len(axioms) != len(expected_axioms) or set(axioms) != expected_axioms:
         raise ValueError('axiom inventory differs')
     return acceptance, order
@@ -83,7 +83,7 @@ def replay(lean: Path, output: Path, jobs: int) -> dict:
             raise ValueError('external object missing: '+module)
         external_hashes[module] = sha(path)
     identity = {'snapshotId':acceptance['snapshotId'], 'leanVersion':version,
-                'sourceLayoutSha256':sha(lean/'evidence/source-layout.json'),
+                'sourceLayoutSha256':sha(root/'evidence/verification/source-layout.json'),
                 'lakeManifestSha256':sha(root/'lake-manifest.json'), 'externalObjects':external_hashes}
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -160,7 +160,7 @@ def replay(lean: Path, output: Path, jobs: int) -> dict:
     if len(lists) != 1:
         raise ValueError('missing or ambiguous final axiom output')
     actual = [x.strip().strip("'").removeprefix('BerryEsseen.') for x in lists[0].split(',')]
-    expected = (lean/'evidence/final-axioms.txt').read_text().splitlines()
+    expected = (root/'evidence/verification/publication-axioms.txt').read_text().splitlines()
     if len(actual) != len(expected) or set(actual) != set(expected):
         raise ValueError('final axiom set differs')
     receipt = dict(identity, status='PASS', checkedModules=len(done), nativeWitnesses=2407,

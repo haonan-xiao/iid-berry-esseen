@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Large.Cell
-import BerryEsseen.DyadicPrawitzLargeNSmallCell
+import BerryEsseen.Interval.Prawitz.LargeNSmallCell
 
 /-!
 # Interval / Small / Fixed Exponent Cell

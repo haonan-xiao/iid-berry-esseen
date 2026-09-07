@@ -1,4 +1,4 @@
-import BerryEsseen.PrawitzLargeN
+import BerryEsseen.Smoothing.Prawitz.LargeN
 
 /-!
 # Analysis / Variable Exponent

@@ -7,7 +7,7 @@ and native-evaluation trust boundary. The shorter presentation is in
 `paper/main.tex` and the accompanying PDF.
 
 The module and lemma names below follow the publication layout.
-Section 9 records the original full execution before these names were
+Section 9 records the completed 0.4395 verification before these names were
 changed. The source correspondence and current rebuild status are documented
 in [FORMALIZATION.md](FORMALIZATION.md).
 
@@ -1020,7 +1020,7 @@ All 2480 main-environment module records passed. In the fresh environment
 all 73 non-native modules were re-elaborated against the exact successful
 native witnesses; every source, direct import and object hash was checked.
 The final theorem in that execution was named
-`BerryEsseen.iidBerryEsseen879_2000`; its publication name is
+`BerryEsseen.iidBerryEsseen879_2000_targetAware`; its publication name is
 `BerryEsseen.iidBerryEsseen879_2000`. The executed axiom set consists of the 2407 individually enumerated
 `_native.native_decide.ax_1_1` witnesses and only
 `propext`, `Classical.choice`, `Quot.sound`: 2410 entries in total.
@@ -1069,4 +1069,4 @@ The source-facing review locators are:
 - final theorem and trust checks:
   `BerryEsseen.Theorems.Bound04395`,
   `BerryEsseen.Verification.FinalAxiomAudit`,
-  `BerryEsseen.Verification.InterfaceDominanceAudit`.
+  `BerryEsseen.Verification.Comparisons.ConclusionMonotonicity`.

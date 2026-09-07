@@ -1,4 +1,4 @@
-import BerryEsseen.DyadicPrawitzFiniteCache
+import BerryEsseen.Interval.Prawitz.FiniteCache
 
 /-!
 # Characteristic Functions / Component Bounds

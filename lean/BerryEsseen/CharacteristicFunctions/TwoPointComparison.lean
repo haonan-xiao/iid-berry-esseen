@@ -1,5 +1,5 @@
-import BerryEsseen.OneStepDisk
-import BerryEsseen.MomentGeometry
+import BerryEsseen.CharacteristicFunctions.MomentDisk
+import BerryEsseen.Moments.ThirdMomentRatio
 import Mathlib.Analysis.Calculus.Taylor
 
 /-!

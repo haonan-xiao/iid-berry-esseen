@@ -1,5 +1,5 @@
 import BerryEsseen.Interval.Finite.Cache
-import BerryEsseen.DyadicPrawitzFiniteLeafTree
+import BerryEsseen.Interval.Prawitz.FiniteLeafTree
 
 /-!
 # Interval / Finite / Leaf

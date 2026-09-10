@@ -55,6 +55,18 @@ dyadic interval certificates.
 The previous 0.45 note and formalization remain available in the
 [initial version](https://github.com/haonan-xiao/iid-berry-esseen/tree/fcdaa7923de9557fdb5744c9a89fa6665c7aab67).
 
+## Citation
+
+```bibtex
+@misc{xiao2026berryesseen,
+  author       = {Xiao, Haonan and Li, Chunlin},
+  title        = {A 0.4395 Upper Bound for the i.i.d. {Berry--Esseen} Constant},
+  year         = {2026},
+  howpublished = {GitHub repository},
+  url          = {https://github.com/haonan-xiao/iid-berry-esseen}
+}
+```
+
 ## Verify the Lean development
 
 The repository pins Lean, Mathlib and StatLean in `lean-toolchain` and
